@@ -1,20 +1,24 @@
 // sw.js
-const CACHE_NAME = 'boboy-menu-v1';
-const OFFLINE_URL = '/offline.html'; // Добавьте offline.html в ваш проект
+const CACHE_NAME = 'boboy-menu-v2';
+const OFFLINE_URL = '/offline.html';
+
+// Добавьте все необходимые ресурсы
 const urlsToCache = [
   '/',
+  '/index.html',
   '/styles.css',
   '/script.js',
   '/data.js',
+  '/offline.html',
   '/BOBOY_logo_basic_blue (1).png',
   '/Лагман Уйгурский.webp',
   '/шашлыки.webp',
   '/казан-кабоб.webp',
+  '/Plov.webp',
   '/4.webp',
   '/10.webp',
   '/6.webp',
-  '/img399.webp',
-  OFFLINE_URL
+  '/img399.webp'
 ];
 
 self.addEventListener('install', function(event) {
@@ -33,7 +37,6 @@ self.addEventListener('activate', function(event) {
       return Promise.all(
         cacheNames.map(function(cacheName) {
           if (cacheName !== CACHE_NAME) {
-            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
@@ -43,42 +46,33 @@ self.addEventListener('activate', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  // Пропускаем не-GET запросы и запросы из других источников
-  if (event.request.method !== 'GET' || !event.request.url.startsWith(self.location.origin)) {
-    return;
-  }
-  
+  if (event.request.method !== 'GET') return;
+
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
-        // Возвращаем закешированную версию или делаем запрос
         if (response) {
           return response;
         }
-        
+
         return fetch(event.request).then(function(response) {
-          // Клонируем ответ, так как он может быть использован только один раз
-          const responseToCache = response.clone();
-          
-          caches.open(CACHE_NAME)
-            .then(function(cache) {
-              cache.put(event.request, responseToCache);
-            });
-            
+          // Кешируем только успешные ответы и статические ресурсы
+          if (response.status === 200 && 
+             (event.request.destination === 'image' || 
+              event.request.destination === 'script' ||
+              event.request.destination === 'style')) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(function(cache) {
+                cache.put(event.request, responseToCache);
+              });
+          }
           return response;
-        }).catch(function(error) {
-          console.log('Fetch failed; returning offline page instead.', error);
-          
-          // Для HTML-запросов возвращаем offline страницу
+        }).catch(function() {
+          // Для страниц возвращаем offline страницу
           if (event.request.destination === 'document') {
             return caches.match(OFFLINE_URL);
           }
-          
-          // Для других типов запросов возвращаем соответствующий ответ
-          return new Response('Network error happened', {
-            status: 408,
-            headers: { 'Content-Type': 'text/plain' }
-          });
         });
       })
   );
