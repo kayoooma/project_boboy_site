@@ -276,25 +276,25 @@ window.PerformanceMonitor = new PerformanceMonitor();
 //     });
 //   }
   
-//   // Добавляем кнопку для просмотра статистики
-//   // setTimeout(() => {
-//   //   const statsBtn = document.createElement('button');
-//   //   statsBtn.innerHTML = '📊 Perf';
-//   //   statsBtn.style.position = 'fixed';
-//   //   statsBtn.style.bottom = '20px';
-//   //   statsBtn.style.right = '20px';
-//   //   statsBtn.style.zIndex = '10000';
-//   //   statsBtn.style.background = '#f0f0f0';
-//   //   statsBtn.style.border = '1px solid #ccc';
-//   //   statsBtn.style.borderRadius = '4px';
-//   //   statsBtn.style.padding = '8px 12px';
-//   //   statsBtn.style.cursor = 'pointer';
-//   //   statsBtn.style.fontSize = '16px';
+  // Добавляем кнопку для просмотра статистики
+  setTimeout(() => {
+    const statsBtn = document.createElement('button');
+    statsBtn.innerHTML = '📊 Perf';
+    statsBtn.style.position = 'fixed';
+    statsBtn.style.bottom = '20px';
+    statsBtn.style.right = '20px';
+    statsBtn.style.zIndex = '10000';
+    statsBtn.style.background = '#f0f0f0';
+    statsBtn.style.border = '1px solid #ccc';
+    statsBtn.style.borderRadius = '4px';
+    statsBtn.style.padding = '8px 12px';
+    statsBtn.style.cursor = 'pointer';
+    statsBtn.style.fontSize = '16px';
     
-//   //   statsBtn.addEventListener('click', () => {
-//   //     console.log('[PerformanceMonitor] Статистика:', window.PerformanceMonitor.getStats());
-//   //   });
+    statsBtn.addEventListener('click', () => {
+      console.log('[PerformanceMonitor] Статистика:', window.PerformanceMonitor.getStats());
+    });
     
-//   //   document.body.appendChild(statsBtn);
-//   // }, 2000);
-// }
+    document.body.appendChild(statsBtn);
+  }, 2000);
+}
