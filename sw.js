@@ -1,33 +1,36 @@
-// sw.js
-const CACHE_NAME = 'boboy-menu-v2';
-const OFFLINE_URL = '/offline.html';
-
-// Добавьте все необходимые ресурсы
+const CACHE_NAME = 'boboy-v4';
 const urlsToCache = [
   '/',
   '/index.html',
   '/styles.css',
-  '/script.js',
+  '/js/main.js',
   '/data.js',
-  '/offline.html',
-  '/BOBOY_logo_basic_blue (1).png',
-  '/Лагман Уйгурский.webp',
-  '/шашлыки.webp',
-  '/казан-кабоб.webp',
-  '/Plov.webp',
-  '/4.webp',
-  '/10.webp',
-  '/6.webp',
-  '/img399.webp'
+  '/js/appUtils.js',
+  '/js/appState.js',
+  '/js/menuData.js',
+  '/js/renderer.js',
+  '/js/heroSlider.js',
+  '/js/modals.js',
+  '/js/navigation.js',
+  '/js/language.js',
+  '/js/decor.js',
+  '/js/gestures.js',
+  '/js/utils.js',
+  '/BOBOY_logo_(favicon).webp'
 ];
 
 self.addEventListener('install', function(event) {
+  self.skipWaiting(); // Принудительная активация нового SW
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(function(cache) {
-        return cache.addAll(urlsToCache);
+        console.log('Opened cache');
+        return cache.addAll(urlsToCache.filter(url => {
+          // Пропускаем несуществующие ресурсы
+          return !url.includes('казан-кабоб') && 
+                 !url.includes('Лагман Уйгурский');
+        }));
       })
-      .then(() => self.skipWaiting())
   );
 });
 
@@ -41,39 +44,18 @@ self.addEventListener('activate', function(event) {
           }
         })
       );
-    }).then(() => self.clients.claim())
+    })
   );
 });
 
 self.addEventListener('fetch', function(event) {
-  if (event.request.method !== 'GET') return;
-
   event.respondWith(
     caches.match(event.request)
       .then(function(response) {
         if (response) {
           return response;
         }
-
-        return fetch(event.request).then(function(response) {
-          // Кешируем только успешные ответы и статические ресурсы
-          if (response.status === 200 && 
-             (event.request.destination === 'image' || 
-              event.request.destination === 'script' ||
-              event.request.destination === 'style')) {
-            const responseToCache = response.clone();
-            caches.open(CACHE_NAME)
-              .then(function(cache) {
-                cache.put(event.request, responseToCache);
-              });
-          }
-          return response;
-        }).catch(function() {
-          // Для страниц возвращаем offline страницу
-          if (event.request.destination === 'document') {
-            return caches.match(OFFLINE_URL);
-          }
-        });
+        return fetch(event.request);
       })
   );
 });

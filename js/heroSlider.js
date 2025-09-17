@@ -1,178 +1,274 @@
-// === МОДУЛЬ HERO-СЛАЙДЕРА ===
+// heroSlider.js - исправленная версия с анимацией текста
 const HeroSlider = (() => {
-  // Инициализация Hero изображений
-  function initHeroImages() {
-    const id = MENU.heroIds[AppState.heroIdx];
+  let currentIndex = 0;
+  let isAnimating = false;
+  let sliderTimer = null;
+
+  // Инициализация слайдера
+  function init() {
+    console.log('HeroSlider init called');
+    
+    // Обновляем текст для текущего слайда  
+    const currentDish = MENU.items[MENU.heroIds[currentIndex]];
+    updateHeroText(currentDish, AppUtils.$('#hero-text-a'));
+    
+    // Загружаем первое изображение
+    loadImage(currentIndex);
+    
+    // Предзагружаем следующее изображение
+    preloadNextImage();
+    
+    // Запускаем таймер
+    startTimer();
+  }
+
+  // Загрузка изображения
+  function loadImage(index) {
+    const id = MENU.heroIds[index];
+    const dish = MENU.items[id];
     const src = HERO_IMG_SRC(id);
-    const alt = AppUtils.i18nName(MENU.items[id]);
-    const a = AppUtils.$('#hero-img-a');
-    const b = AppUtils.$('#hero-img-b');
-    if (a) {
-      a.src = src;
-      a.alt = alt;
-      a.style.transition = 'none';
-      a.style.transform = 'translateX(0)';
-    }
-    if (b) {
-      b.src = src;
-      b.alt = '';
-      b.style.transition = 'none';
-      b.style.transform = 'translateX(100%)';
-    }
-    AppState._heroFlip = false;
+    
+    const img = new Image();
+    img.src = src;
+    img.alt = AppUtils.i18nName(dish);
+    
+    img.onload = () => {
+      // Устанавливаем изображение в активный слот
+      const activeImg = AppUtils.$('#hero-img-a');
+      if (activeImg) {
+        activeImg.src = src;
+        activeImg.alt = AppUtils.i18nName(dish);
+      }
+      
+      // Обновляем текст
+      updateHeroText(dish, AppUtils.$('#hero-text-a'));
+    };
+    
+    return img;
   }
 
-  async function slideHeroImage(src, alt, dir = 1) {
-    const a = AppUtils.$('#hero-img-a');
-    const b = AppUtils.$('#hero-img-b');
-    const incoming = AppState._heroFlip ? a : b;
-    const outgoing = AppState._heroFlip ? b : a;
-    if (!incoming || !outgoing) return;
-    if (incoming.src !== src) incoming.src = src;
-    incoming.alt = alt || '';
-    try {
-      if (incoming.decode) await incoming.decode();
-    } catch (e) { }
-    [incoming, outgoing].forEach(img => {
-      img.style.transition = 'none';
-    });
-    incoming.style.transform = `translateX(${dir > 0 ? 100 : -100}%)`;
-    outgoing.style.transform = 'translateX(0%)';
-    void incoming.offsetWidth; // reflow
-    const dur = 250, easing = 'cubic-bezier(.22,.61,.36,1)';
-    incoming.style.transition = `transform ${dur}ms ${easing}`;
-    outgoing.style.transition = `transform ${dur}ms ${easing}`;
-    incoming.style.transform = 'translateX(0%)';
-    outgoing.style.transform = `translateX(${dir > 0 ? -100 : 100}%)`;
-    await new Promise(res => {
-      let done = 0;
-      const onEnd = (e) => {
-        if (e.propertyName === 'transform') {
-          e.currentTarget.removeEventListener('transitionend', onEnd);
-          if (++done === 2) res();
-        }
-      };
-      incoming.addEventListener('transitionend', onEnd);
-      outgoing.addEventListener('transitionend', onEnd);
-    });
-    AppState._heroFlip = !AppState._heroFlip;
+  // Предзагрузка следующего изображения
+  function preloadNextImage() {
+    const nextIndex = (currentIndex + 1) % MENU.heroIds.length;
+    const id = MENU.heroIds[nextIndex];
+    const src = HERO_IMG_SRC(id);
+    
+    const img = new Image();
+    img.src = src;
   }
 
-  async function applyHero(id, dir = 1) {
-    if (AppState.isHeroAnimating) return;
-    AppState.isHeroAnimating = true;
-    const d = MENU.items[id];
-    if (!d) {
-      AppState.isHeroAnimating = false;
+  // Обновление текста
+  function updateHeroText(dish, element) {
+    const name = element.querySelector('.dish-name');
+    const desc = element.querySelector('.dish-desc');
+    const badges = element.querySelector('.dish-badges');
+    
+    if (name) name.textContent = AppUtils.i18nName(dish);
+    if (desc) desc.textContent = AppUtils.i18nDesc(dish, dish.id);
+    if (badges) {
+      badges.innerHTML = `<span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-lg border bg-amber-500/10 border-amber-500/20 text-amber-800 font-bold">${AppUtils.fmt(dish.price)}</span>`;
+    }
+  }
+
+  // Плавная анимация перехода
+  function animateTransition(direction) {
+    if (isAnimating) return;
+    isAnimating = true;
+    
+    const container = AppUtils.$('#hero-slider');
+    const activeImg = AppUtils.$('#hero-img-a');
+    const nextImg = AppUtils.$('#hero-img-b');
+    const activeText = AppUtils.$('#hero-text-a');
+    const nextText = AppUtils.$('#hero-text-b');
+    
+    if (!container || !activeImg || !nextImg || !activeText || !nextText) {
+      isAnimating = false;
       return;
     }
-    const name = AppUtils.$('#dishOfDayName');
-    const desc = AppUtils.$('#dishOfDayDesc');
-    const badges = AppUtils.$('#dishOfDayBadges');
-    [name, desc].forEach(el => {
-      if (!el) return;
-      el.classList.remove('slide-in');
-      el.classList.add('slide-out');
-    });
+    
+    // Определяем следующий индекс
+    const nextIndex = direction === 'next' 
+      ? (currentIndex + 1) % MENU.heroIds.length
+      : (currentIndex - 1 + MENU.heroIds.length) % MENU.heroIds.length;
+    
+    const nextId = MENU.heroIds[nextIndex];
+    const nextDish = MENU.items[nextId];
+    const nextSrc = HERO_IMG_SRC(nextId);
+    
+    // Устанавливаем следующее изображение
+    nextImg.src = nextSrc;
+    nextImg.alt = AppUtils.i18nName(nextDish);
+    
+    // Обновляем текст для следующего слайда
+    updateHeroText(nextDish, nextText);
+    
+    // Настраиваем начальные позиции
+    activeImg.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+    nextImg.style.transition = 'transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+    activeText.style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+    nextText.style.transition = 'opacity 0.6s cubic-bezier(0.23, 1, 0.32, 1), transform 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+    
+    if (direction === 'next') {
+      activeImg.style.transform = 'translateX(0)';
+      nextImg.style.transform = 'translateX(100%)';
+      activeText.style.opacity = '1';
+      activeText.style.transform = 'translateX(0)';
+      nextText.style.opacity = '0';
+      nextText.style.transform = 'translateX(100%)';
+    } else {
+      activeImg.style.transform = 'translateX(0)';
+      nextImg.style.transform = 'translateX(-100%)';
+      activeText.style.opacity = '1';
+      activeText.style.transform = 'translateX(0)';
+      nextText.style.opacity = '0';
+      nextText.style.transform = 'translateX(-100%)';
+    }
+    
+    // Даем браузеру время на отрисовку
     setTimeout(() => {
-      if (name) name.textContent = AppUtils.i18nName(d);
-      if (desc) desc.textContent = AppUtils.i18nDesc(d, id);
-      if (badges) badges.innerHTML = `<span class="inline-flex items-center gap-2 px-4 py-2 rounded-full text-lg border bg-amber-500/10 border-amber-500/20 text-amber-800 font-bold">${AppUtils.fmt(d.price)}</span>`;
-      [name, desc].forEach(el => {
-        if (!el) return;
-        el.classList.remove('slide-out');
-        el.classList.add('slide-in');
-      });
-      setTimeout(() => {
-        [name, desc].forEach(el => el && el.classList.remove('slide-in'));
-      }, 420);
-    }, 60);
-    await slideHeroImage(HERO_IMG_SRC(id), AppUtils.i18nName(d), dir);
-    AppState.isHeroAnimating = false;
+      // Запускаем анимацию
+      if (direction === 'next') {
+        activeImg.style.transform = 'translateX(-100%)';
+        nextImg.style.transform = 'translateX(0)';
+        activeText.style.opacity = '0';
+        activeText.style.transform = 'translateX(-100%)';
+        nextText.style.opacity = '1';
+        nextText.style.transform = 'translateX(0)';
+      } else {
+        activeImg.style.transform = 'translateX(100%)';
+        nextImg.style.transform = 'translateX(0)';
+        activeText.style.opacity = '0';
+        activeText.style.transform = 'translateX(100%)';
+        nextText.style.opacity = '1';
+        nextText.style.transform = 'translateX(0)';
+      }
+      
+      // По завершении анимации
+      const onTransitionEnd = () => {
+        // Сбрасываем трансформации
+        activeImg.style.transition = 'none';
+        nextImg.style.transition = 'none';
+        activeText.style.transition = 'none';
+        nextText.style.transition = 'none';
+        
+        // Меняем местами изображения
+        activeImg.style.transform = 'translateX(0)';
+        nextImg.style.transform = direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
+        
+        // Копируем следующее изображение в активное
+        activeImg.src = nextImg.src;
+        activeImg.alt = nextImg.alt;
+        
+        // Копируем следующий текст в активный
+        updateHeroText(nextDish, activeText);
+        
+        // Сбрасываем позиции текста
+        activeText.style.opacity = '1';
+        activeText.style.transform = 'translateX(0)';
+        nextText.style.opacity = '0';
+        nextText.style.transform = direction === 'next' ? 'translateX(100%)' : 'translateX(-100%)';
+        
+        // Обновляем текущий индекс
+        currentIndex = nextIndex;
+        
+        // Предзагружаем следующее изображение
+        preloadNextImage();
+        
+        isAnimating = false;
+        
+        // Убираем обработчик
+        activeImg.removeEventListener('transitionend', onTransitionEnd);
+      };
+      
+      activeImg.addEventListener('transitionend', onTransitionEnd);
+    }, 50);
   }
 
-  function startHero() {
-    initHeroImages();
-    applyHero(MENU.heroIds[AppState.heroIdx], 1);
-    restartHeroTimer();
+  // Следующий слайд
+  function nextSlide() {
+    animateTransition('next');
+    restartTimer();
   }
 
-  function restartHeroTimer() {
-    if (AppState.heroTimer) clearInterval(AppState.heroTimer);
-    AppState.heroTimer = setInterval(() => {
-      if (AppState.isHeroAnimating) return;
-      AppState.heroIdx = (AppState.heroIdx + 1) % MENU.heroIds.length;
-      applyHero(MENU.heroIds[AppState.heroIdx], 1);
-    }, 5000);
+  // Предыдущий слайд
+  function prevSlide() {
+    animateTransition('prev');
+    restartTimer();
   }
 
-  function nextHero() {
-    if (AppState.isHeroAnimating) return;
-    AppState.heroIdx = (AppState.heroIdx + 1) % MENU.heroIds.length;
-    applyHero(MENU.heroIds[AppState.heroIdx], 1);
-    restartHeroTimer();
+  // Запуск таймера
+  function startTimer() {
+    if (sliderTimer) clearInterval(sliderTimer);
+    sliderTimer = setInterval(nextSlide, 5000);
   }
 
-  function prevHero() {
-    if (AppState.isHeroAnimating) return;
-    AppState.heroIdx = (AppState.heroIdx - 1 + MENU.heroIds.length) % MENU.heroIds.length;
-    applyHero(MENU.heroIds[AppState.heroIdx], -1);
-    restartHeroTimer();
+  // Перезапуск таймера
+  function restartTimer() {
+    if (sliderTimer) {
+      clearInterval(sliderTimer);
+      startTimer();
+    }
   }
 
-  function enableHeroManual() {
+  // Остановка таймера
+  function stopTimer() {
+    if (sliderTimer) {
+      clearInterval(sliderTimer);
+      sliderTimer = null;
+    }
+  }
+
+  // Включение управления
+  function enableControls() {
     const area = AppUtils.$('#hero-slider');
     if (!area) return;
-    area.querySelector('.hero-arrow.left')?.addEventListener('click', prevHero, { passive: true });
-    area.querySelector('.hero-arrow.right')?.addEventListener('click', nextHero, { passive: true });
-    let sx = null, sy = null, active = false;
-    const TH = 40;
-    area.addEventListener('touchstart', e => {
-      const t = e.changedTouches[0];
-      sx = t.clientX;
-      sy = t.clientY;
-      active = true;
+    
+    // Стрелки
+    const leftArrow = area.querySelector('.hero-arrow.left');
+    const rightArrow = area.querySelector('.hero-arrow.right');
+    
+    if (leftArrow) {
+      leftArrow.addEventListener('click', prevSlide);
+    }
+    
+    if (rightArrow) {
+      rightArrow.addEventListener('click', nextSlide);
+    }
+    
+    // Свайпы
+    let touchStartX = 0;
+    
+    area.addEventListener('touchstart', (e) => {
+      touchStartX = e.touches[0].clientX;
     }, { passive: true });
-    area.addEventListener('touchmove', e => {
-      if (!active) return;
-      const t = e.changedTouches[0];
-      const dx = t.clientX - sx;
-      const dy = t.clientY - sy;
-      if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > TH) {
-        active = false;
-        if (dx < 0) nextHero();
-        else prevHero();
+    
+    area.addEventListener('touchend', (e) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffX = touchEndX - touchStartX;
+      
+      if (Math.abs(diffX) > 50) {
+        if (diffX > 0) {
+          prevSlide();
+        } else {
+          nextSlide();
+        }
       }
     }, { passive: true });
-    area.addEventListener('touchend', () => {
-      active = false;
-    }, { passive: true });
-    let px = null, py = null, down = false;
-    area.addEventListener('pointerdown', e => {
-      px = e.clientX;
-      py = e.clientY;
-      down = true;
-    });
-    area.addEventListener('pointerup', e => {
-      if (!down) return;
-      const dx = e.clientX - px;
-      const dy = e.clientY - py;
-      if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > TH) {
-        if (dx < 0) nextHero();
-        else prevHero();
+    
+    // Клавиатура
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowLeft') {
+        prevSlide();
+      } else if (e.key === 'ArrowRight') {
+        nextSlide();
       }
-      down = false;
-    });
-    window.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft') prevHero();
-      else if (e.key === 'ArrowRight') nextHero();
     });
   }
 
   return {
-    startHero,
-    enableHeroManual,
-    nextHero,
-    prevHero
+    init,
+    enableControls,
+    nextSlide,
+    prevSlide
   };
 })();

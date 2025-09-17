@@ -107,7 +107,7 @@ const MENU = {
     starters: ["suzma", "marinated_veg", "kulcha", "garlic_nan", "khach_ap", "khach_meg", "cheb_beef", "cheb_cheese", "somsa_trad", "somsa_olot", "turkish_meze"],
     salads: ["achik", "caesar", "greek", "bakhor", "olivier", "eggplant_tempura", "choban", "fresh_veg_assort", "chirokchi", "smak", "mens_caprice", "tulum", "thai_beef"],
     soups: ["kainatma", "lagman_uyghur", "mastava", "chicken_noodle", "chuchvara", "moshxurda", "lentil", "shurpa_jug", "manpar"],
-    mains: ["festive_pilaf", "say_beef", "manti", "kazan_kebab", "fried_lagman", "norin", "vaguri", "dolma", "assort_set", "sokoro", "somboro", "beshbarmak", "nohot_shurak", "stew", "halim", "say_chicken", "say_beef_egg", "plov"],
+    mains: ["say_beef", "manti", "kazan_kebab", "fried_lagman", "norin", "vaguri", "dolma", "assort_set", "sokoro", "somboro", "beshbarmak", "nohot_shurak", "stew", "halim", "say_chicken", "say_beef_egg", "plov"],
     kebabs: ["minced_beef", "beef_kebab", "lamb_kebab", "lamb_chops", "chicken_wings", "veg_kebab", "chicken_thighs", "liver", "lamb_ribs", "roulettes", "charvi"],
     sides: ["french_fries", "rice"],
     desserts: ["napoleon", "nuts", "honey_cake", "meringue_rolls", "afghan", "san_sebastian", "tiramisu", "kiev", "snickers_rolls", "chocolate_fondue", "profiteroles", "bakhlava", "matilda", "chak_chak", "assort_milli"],
@@ -188,7 +188,7 @@ const MENU = {
       id: "kazan_kebab",
       price: 159000,
       veg: false,
-      image: "assets/казан-кабоб.webp",
+      image: "assets/kazan-kebab.webp",
       i18n: {
         name: {
           ru: "Казан-кабоб",
@@ -642,7 +642,7 @@ const MENU = {
       id: "lagman_uyghur",
       price: 63000,
       veg: false,
-      image: "assets/Лагман Уйгурский.webp",
+      image: "assets/lagman-uygurskiy.webp",
       i18n: {
         name: {
           ru: "Лагман уйгурский",
@@ -1114,7 +1114,7 @@ const MENU = {
       id: "beef_kebab",
       price: 43000,
       veg: false,
-      image: "assets/шашлыки.webp",
+      image: "assets/shashlik-mol_jaz.webp",
       i18n: {
         name: {
           ru: "Шашлык из говядины",
@@ -1293,7 +1293,7 @@ const MENU = {
 
     // Гарниры
     french_fries: {
-      id: "french_frides",
+      id: "french_fries",
       price: 25000,
       veg: true,
       image: "",
@@ -2799,11 +2799,10 @@ const MENU = {
         }
       }
     },
-    curtis_summer: {
+        curtis_summer: {
       id: "curtis_summer",
       merchant: "Curtis",
-      price:
-      30000,
+      price: 30000,
       veg: true,
       image: "",
       i18n: {
@@ -2918,8 +2917,8 @@ const HERO_DESC_BY_ID = {
 
 // Функция для получения пути к изображению для героя
 const HERO_IMG_SRC = id => MENU.items[id]?.image || {
-  lagman_uyghur: "assets/Лагман Уйгурский.webp",
-  beef_kebab: "assets/шашлыки.webp",
-  kazan_kebab: "assets/казан-кабоб.webp",
+  lagman_uyghur: "assets/lagman-uygurskiy.webp",
+  beef_kebab: "assets/shashlik-mol_jaz.webp",
+  kazan_kebab: "assets/kazan-kebab.webp",
   plov: "assets/Plov.webp"
 }[id] || '';
