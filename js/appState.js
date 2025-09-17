@@ -1,9 +1,15 @@
 // === МОДУЛЬ СОСТОЯНИЯ ПРИЛОЖЕНИЯ ===
 const AppState = (() => {
-  // Получаем язык из localStorage или используем русский по умолчанию
+  // Принудительно устанавливаем русский язык по умолчанию
   let lang = 'ru';
   try {
-    lang = localStorage.getItem('boboy_lang') || 'ru';
+    const savedLang = localStorage.getItem('boboy_lang');
+    // Используем сохраненный язык только если он есть, иначе оставляем русский
+    if (savedLang) {
+      lang = savedLang;
+    } else {
+      localStorage.setItem('boboy_lang', 'ru');
+    }
   } catch (e) {
     console.error('Error accessing localStorage:', e);
   }

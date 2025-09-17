@@ -116,5 +116,22 @@ function initApp() {
   }
 }
 
+// Функция обновления интерфейса при смене языка
+function updateAppLanguage() {
+  // Закрываем модальное окно напитков если открыто
+  if (AppState.drinksModalOpen) {
+    Modals.closeDrinksModal();
+  }
+
+  Renderer.renderTopCopy();
+  Renderer.renderCategoryChips();
+  Renderer.renderActiveCategory();
+  
+  // Обновляем текст в hero-слайдере
+  if (typeof HeroSlider.updateTexts === 'function') {
+    HeroSlider.updateTexts();
+  }
+}
+
 // Инициализация при загрузке DOM
 document.addEventListener('DOMContentLoaded', initApp);

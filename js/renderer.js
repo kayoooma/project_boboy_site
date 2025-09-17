@@ -159,6 +159,7 @@ const Renderer = (() => {
 
   return {
     renderTopCopy,
+    renderCategoryChips, // Добавляем эту функцию в экспорт
     renderActiveCategory,
     setActiveChip,
     activeCatId

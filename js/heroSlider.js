@@ -3,9 +3,11 @@ const HeroSlider = (() => {
   let currentIndex = 0;
   let isAnimating = false;
   let sliderTimer = null;
+  let initialized = false;
 
   // Инициализация слайдера
   function init() {
+    if (initialized) return;
     console.log('HeroSlider init called');
     
     // Обновляем текст для текущего слайда  
@@ -20,6 +22,8 @@ const HeroSlider = (() => {
     
     // Запускаем таймер
     startTimer();
+    
+    initialized = true;
   }
 
   // Загрузка изображения
@@ -265,10 +269,20 @@ const HeroSlider = (() => {
     });
   }
 
+  // Обновление текстов при смене языка
+  function updateTexts() {
+    if (MENU.heroIds.length === 0) return;
+    const currentDish = MENU.items[MENU.heroIds[currentIndex]];
+    if (!currentDish) return;
+    updateHeroText(currentDish, AppUtils.$('#hero-text-a'));
+    updateHeroText(currentDish, AppUtils.$('#hero-text-b'));
+  }
+
   return {
     init,
     enableControls,
     nextSlide,
-    prevSlide
+    prevSlide,
+    updateTexts
   };
 })();

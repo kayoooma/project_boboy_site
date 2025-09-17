@@ -10,7 +10,7 @@ const Language = (() => {
         }
         AppState.lang = l;
         localStorage.setItem('boboy_lang', l);
-        initApp();
+        updateAppLanguage();
         hideLangGate();
       });
     });
