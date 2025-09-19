@@ -140,7 +140,7 @@ const Renderer = (() => {
     const el = document.createElement('div');
     el.className = 'card p-4 flex flex-col cursor-pointer';
     el.dataset.id = item.id;
-    const vegBadge = item.veg ? `<div class="w-7 h-7 flex-shrink-0 rounded-full bg-green-100 flex items-center justify-center" title="${STR[AppState.lang].vegetarian || 'Vegetarian'}"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" stroke="currentColor" class="text-green-600"><path d="M7 14c-3 0-4-1-4-4  0-3 2-6 5-7 3 1 5 4 5 7s-1 4-4 4-2-1-2-1zM4 15c2 2 6 2 8 0"/></svg></div>` : '';
+    const vegBadge = item.veg ? `<div class="w-7 h-7 flex-shrink-0 rounded-full bg-green-100 flex items-center justify-center" title="${STR[AppState.lang].vegetarian || 'Vegetarian'}"><img src="assets/icon-nature.png" alt="${STR[AppState.lang].vegetarian || 'Vegetarian'}" class="w-5 h-5"></div>` : '';
     const name = AppUtils.i18nName(item);
     const desc = item?.i18n?.desc?.[AppState.lang] || '';
     el.innerHTML = `<div class="flex-grow">

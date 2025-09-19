@@ -107,7 +107,7 @@ const MENU = {
     starters: ["suzma", "marinated_veg", "kulcha", "garlic_nan", "khach_ap", "khach_meg", "cheb_beef", "cheb_cheese", "somsa_trad", "somsa_olot", "turkish_meze"],
     salads: ["achik", "caesar", "greek", "bakhor", "olivier", "eggplant_tempura", "choban", "fresh_veg_assort", "chirokchi", "smak", "mens_caprice", "tulum", "thai_beef"],
     soups: ["kainatma", "lagman_uyghur", "mastava", "chicken_noodle", "chuchvara", "moshxurda", "lentil", "shurpa_jug", "manpar"],
-    mains: ["say_beef", "manti", "kazan_kebab", "fried_lagman", "norin", "vaguri", "dolma", "assort_set", "sokoro", "somboro", "beshbarmak", "nohot_shurak", "stew", "halim", "say_chicken", "say_beef_egg", "plov"],
+    mains: [ "plov", "say_beef", "manti", "kazan_kebab", "fried_lagman", "norin", "vaguri", "dolma", "assort_set", "sokoro", "somboro", "beshbarmak", "nohot_shurak", "stew", "halim", "say_chicken", "say_beef_egg", ],
     kebabs: ["minced_beef", "beef_kebab", "lamb_kebab", "lamb_chops", "chicken_wings", "veg_kebab", "chicken_thighs", "liver", "lamb_ribs", "roulettes", "charvi"],
     sides: ["french_fries", "rice"],
     desserts: ["napoleon", "nuts", "honey_cake", "meringue_rolls", "afghan", "san_sebastian", "tiramisu", "kiev", "snickers_rolls", "chocolate_fondue", "profiteroles", "bakhlava", "matilda", "chak_chak", "assort_milli"],
@@ -170,7 +170,7 @@ const MENU = {
       id: "khach_ap",
       price: 73000,
       veg: true,
-      image: "",
+      image: "assets/Hach Adjar.webp",
       i18n: {
         name: {
           ru: "Хачапури по-аджарски",
@@ -206,7 +206,7 @@ const MENU = {
       id: "suzma",
       price: 25000,
       veg: true,
-      image: "",
+      image: "assets/Suzma.webp",
       i18n: {
         name: {
           ru: "Сузма",
@@ -224,7 +224,7 @@ const MENU = {
       id: "marinated_veg",
       price: 38000,
       veg: true,
-      image: "",
+      image: "assets/Pickled Vegetables.webp",
       i18n: {
         name: {
           ru: "Маринованные овощи",
@@ -260,7 +260,7 @@ const MENU = {
       id: "garlic_nan",
       price: 28000,
       veg: true,
-      image: "",
+      image: "assets/Garlick Nan.webp",
       i18n: {
         name: {
           ru: "Чесночный нан",
@@ -278,7 +278,7 @@ const MENU = {
       id: "khach_meg",
       price: 73000,
       veg: true,
-      image: "",
+      image: "assets/Hach Megrel.webp",
       i18n: {
         name: {
           ru: "Хачапури по-мегрельски",
@@ -332,7 +332,7 @@ const MENU = {
       id: "somsa_trad",
       price: 20000,
       veg: false,
-      image: "",
+      image: "assets/Somsa.webp",
       i18n: {
         name: {
           ru: "Самса традиционная",
@@ -350,7 +350,7 @@ const MENU = {
       id: "somsa_olot",
       price: 15000,
       veg: false,
-      image: "",
+      image: "assets/Olot somsa.webp",
       i18n: {
         name: {
           ru: "Самса Олот",
@@ -388,7 +388,7 @@ const MENU = {
       id: "achik",
       price: 29000,
       veg: true,
-      image: "",
+      image: "assets/achik.webp",
       i18n: {
         name: {
           ru: "Ачик-чучук",
@@ -406,7 +406,7 @@ const MENU = {
       id: "caesar",
       price: 89000,
       veg: false,
-      image: "",
+      image: "assets/Chezar.webp",
       i18n: {
         name: {
           ru: "Цезарь с курицей",
@@ -424,7 +424,7 @@ const MENU = {
       id: "greek",
       price: 79000,
       veg: true,
-      image: "",
+      image: "assets/Greck salad.webp",
       i18n: {
         name: {
           ru: "Греческий салат",
@@ -442,7 +442,7 @@ const MENU = {
       id: "bakhor",
       price: 45000,
       veg: true,
-      image: "",
+      image: "assets/Baxo.webp",
       i18n: {
         name: {
           ru: "Салат Бахор",
@@ -460,7 +460,7 @@ const MENU = {
       id: "olivier",
       price: 63000,
       veg: false,
-      image: "",
+      image: "assets/Olivie.webp",
       i18n: {
         name: {
           ru: "Оливье",
@@ -478,7 +478,7 @@ const MENU = {
       id: "eggplant_tempura",
       price: 69000,
       veg: true,
-      image: "",
+      image: "assets/Tempura.webp",
       i18n: {
         name: {
           ru: "Салат с баклажаном темпура",
@@ -496,7 +496,7 @@ const MENU = {
       id: "choban",
       price: 69000,
       veg: true,
-      image: "",
+      image: "assets/Choban.webp",
       i18n: {
         name: {
           ru: "Чобан салат",
@@ -514,7 +514,7 @@ const MENU = {
       id: "fresh_veg_assort",
       price: 45000,
       veg: true,
-      image: "",
+      image: "assets/Fresh Vegetables.webp",
       i18n: {
         name: {
           ru: "Ассорти из свежих овощей",
@@ -624,7 +624,7 @@ const MENU = {
       id: "kainatma",
       price: 79000,
       veg: false,
-      image: "",
+      image: "assets/Kaynatma.webp",
       i18n: {
         name: {
           ru: "Кайнатма шурпа",
@@ -660,7 +660,7 @@ const MENU = {
       id: "mastava",
       price: 55000,
       veg: false,
-      image: "",
+      image: "assets/Mastava.webp",
       i18n: {
         name: {
           ru: "Мастава",
@@ -678,7 +678,7 @@ const MENU = {
       id: "chicken_noodle",
       price: 49000,
       veg: false,
-      image: "",
+      image: "assets/Chiken Lapsha.webp",
       i18n: {
         name: {
           ru: "Куриный суп с лапшой",
@@ -696,7 +696,7 @@ const MENU = {
       id: "chuchvara",
       price: 61000,
       veg: false,
-      image: "",
+      image: "assets/Chuchvara.webp",
       i18n: {
         name: {
           ru: "Чучвара",
@@ -750,7 +750,7 @@ const MENU = {
       id: "shurpa_jug",
       price: 75000,
       veg: false,
-      image: "",
+      image: "assets/Koza Shurpa.webp",
       i18n: {
         name: {
           ru: "Шурпа в кувшине",
@@ -768,7 +768,7 @@ const MENU = {
       id: "manpar",
       price: 55000,
       veg: false,
-      image: "",
+      image: "assets/Manpar.webp",
       i18n: {
         name: {
           ru: "Манпар",
@@ -824,7 +824,7 @@ const MENU = {
       id: "say_beef",
       price: 89000,
       veg: false,
-      image: "",
+      image: "assets/Beaf Sai.webp",
       i18n: {
         name: {
           ru: "Сай говяжий",
@@ -842,7 +842,7 @@ const MENU = {
       id: "manti",
       price: 19000,
       veg: false,
-      image: "",
+      image: "assets/Manti.webp",
       i18n: {
         name: {
           ru: "Манты (1 шт)",
@@ -860,7 +860,7 @@ const MENU = {
       id: "fried_lagman",
       price: 73000,
       veg: false,
-      image: "",
+      image: "assets/Fried Lagman.webp",
       i18n: {
         name: {
           ru: "Лагман жареный",
@@ -878,7 +878,7 @@ const MENU = {
       id: "norin",
       price: 93000,
       veg: false,
-      image: "",
+      image: "assets/Norin.webp",
       i18n: {
         name: {
           ru: "Норин",
@@ -896,7 +896,7 @@ const MENU = {
       id: "vaguri",
       price: 89000,
       veg: false,
-      image: "",
+      image: "assets/Vaguri.webp",
       i18n: {
         name: {
           ru: "Вагури (300 г)",
@@ -914,7 +914,7 @@ const MENU = {
       id: "dolma",
       price: 75000,
       veg: false,
-      image: "",
+      image: "assets/Dolma.webp",
       i18n: {
         name: {
           ru: "Долма (Ток Ош)",
@@ -950,7 +950,7 @@ const MENU = {
       id: "sokoro",
       price: 95000,
       veg: false,
-      image: "",
+      image: "assets/Sokoro.webp",
       i18n: {
         name: {
           ru: "Сокоро",
@@ -968,7 +968,7 @@ const MENU = {
       id: "somboro",
       price: 85000,
       veg: false,
-      image: "",
+      image: "assets/Somboro.webp",
       i18n: {
         name: {
           ru: "Сомборо",
@@ -986,7 +986,7 @@ const MENU = {
       id: "beshbarmak",
       price: 99000,
       veg: false,
-      image: "",
+      image: "assets/Beshbarmak.webp",
       i18n: {
         name: {
           ru: "Бешбармак",
@@ -1004,7 +1004,7 @@ const MENU = {
       id: "nohot_shurak",
       price: 75000,
       veg: false,
-      image: "",
+      image: "assets/Noxat Shurak.webp",
       i18n: {
         name: {
           ru: "Нохот Шурак",
@@ -1022,7 +1022,7 @@ const MENU = {
       id: "stew",
       price: 85000,
       veg: false,
-      image: "",
+      image: "assets/Tushonka.webp",
       i18n: {
         name: {
           ru: "Тушенка",
@@ -1258,7 +1258,7 @@ const MENU = {
       id: "roulettes",
       price: 55000,
       veg: false,
-      image: "",
+      image: "assets/shashlik Rulets.webp",
       i18n: {
         name: {
           ru: "Рулетики",
@@ -1296,7 +1296,7 @@ const MENU = {
       id: "french_fries",
       price: 25000,
       veg: true,
-      image: "",
+      image: "assets/Fri.webp",
       i18n: {
         name: {
           ru: "Картофель фри",
@@ -1314,7 +1314,7 @@ const MENU = {
       id: "rice",
       price: 15000,
       veg: true,
-      image: "",
+      image: "assets/Rice.webp",
       i18n: {
         name: {
           ru: "Рис",
