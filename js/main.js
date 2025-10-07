@@ -8,6 +8,11 @@ function initApp() {
   window.appInitialized = true;
   
   try {
+    // Инициализация прелоадера
+    if (typeof Preloader !== 'undefined' && typeof Preloader.init === 'function') {
+      Preloader.init();
+    }
+    
     // Проверяем, что все необходимые модули загружены
     if (typeof AppState === 'undefined' || typeof Renderer === 'undefined' || 
         typeof HeroSlider === 'undefined' || typeof Language === 'undefined' ||
@@ -51,7 +56,7 @@ function initApp() {
     }
 
     // Слушатели
-    const searchEl = AppUtils.$('#search');
+    const searchEl = document.querySelector('#search');
     if (searchEl) {
       const debouncedSearch = AppUtils.debounce(e => {
         AppState.query = e.target.value;
@@ -61,7 +66,7 @@ function initApp() {
       searchEl.addEventListener('input', debouncedSearch);
     }
     
-    const vegBtn = AppUtils.$('#vegOnlyBtn');
+    const vegBtn = document.querySelector('#vegOnlyBtn');
     if (vegBtn) {
       vegBtn.classList.toggle('bg-green-100', AppState.vegOnly);
       vegBtn.classList.toggle('border-green-300', AppState.vegOnly);
@@ -79,7 +84,7 @@ function initApp() {
     }
 
     // Модал блюд
-    const dishModal = AppUtils.$('#dish-modal');
+    const dishModal = document.querySelector('#dish-modal');
     if (dishModal) {
       dishModal.addEventListener('click', e => {
         if (e.target.id === 'dish-modal' && typeof Modals.closeDishModal === 'function') {
@@ -88,7 +93,7 @@ function initApp() {
       });
     }
     
-    const dishModalClose = AppUtils.$('#dish-modal-close');
+    const dishModalClose = document.querySelector('#dish-modal-close');
     if (dishModalClose && typeof Modals.closeDishModal === 'function') {
       dishModalClose.addEventListener('click', Modals.closeDishModal);
     }
@@ -113,6 +118,10 @@ function initApp() {
     console.log('App initialized successfully');
   } catch (error) {
     console.error('Error initializing app:', error);
+    // В случае ошибки все равно скрываем прелоадер
+    if (typeof Preloader !== 'undefined' && typeof Preloader.hidePreloader === 'function') {
+      Preloader.hidePreloader();
+    }
   }
 }
 

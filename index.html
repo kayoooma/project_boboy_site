@@ -13,9 +13,43 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=6"> <!-- Обновил версию CSS -->
 </head>
 <body class="min-h-screen">
+  <!-- Премиальный загрузочный экран -->
+  <div id="preloader" class="fixed inset-0 z-[9999] bg-white flex items-center justify-center">
+    <div class="text-center">
+      <!-- Анимированный логотип -->
+      <div class="logo-animation mb-8">
+        <img src="BOBOY_logo_basic_blue (1).png" alt="BOBOY" class="h-24 w-auto mx-auto preloader-logo">
+      </div>
+      
+      <!-- Название ресторана -->
+      <div class="font-heading font-extrabold text-3xl mb-2 tracking-wide preloader-title" style="color:var(--brand-blue)">
+        BOBOY
+      </div>
+      
+      <!-- Подзаголовок -->
+      <div class="text-sm uppercase tracking-wider mb-8 preloader-subtitle" style="color:var(--brand-dark-text)">
+        UZBEK EATERY
+      </div>
+      
+      <!-- Анимированный индикатор загрузки -->
+      <div class="loading-bar-container w-48 h-1 bg-gray-200 rounded-full mx-auto overflow-hidden">
+        <div class="loading-bar h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full"></div>
+      </div>
+      
+      <!-- Декоративные элементы -->
+      <div class="preloader-decoration mt-8 opacity-50">
+        <div class="flex justify-center space-x-2">
+          <div class="w-2 h-2 bg-amber-500 rounded-full animate-pulse"></div>
+          <div class="w-2 h-2 bg-amber-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+          <div class="w-2 h-2 bg-amber-500 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- ДЕКОР -->
   <div id="decor-layer" aria-hidden="true">
     <img id="left-art" src="6.webp" alt="Фоновая иллюстрация слева" loading="eager" decoding="async">
@@ -40,18 +74,18 @@
     </div>
   </header>
 
-  <!-- HERO-СЛАЙДЕР -->
- <section id="hero-slider" class="relative overflow-hidden hero-bg select-none">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 hero-content">
-    <div class="grid md:grid-cols-2 gap-12 items-center">
+<!-- HERO-СЛАЙДЕР -->
+<section id="hero-slider" class="relative overflow-hidden hero-bg select-none">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 hero-content">
+    <div class="grid md:grid-cols-2 gap-8 items-center">
       <div id="hero-text" class="relative will-change-transform" style="min-height: 350px;">
         <div id="hero-text-a" class="absolute top-0 left-0 w-full">
           <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full" style="background-color:rgba(184,158,115,0.1);border:1px solid rgba(184,158,115,0.3)">
             <img src="assets/icon-heart.png" alt="" class="w-5 h-5">
             <span class="text-sm uppercase tracking-wider font-semibold" style="color:var(--brand-dark-text)">Блюдо дня</span>
           </div>
-          <h1 class="dish-name mt-5 text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight">—</h1>
-          <p class="dish-desc mt-5 text-lg max-w-prose leading-relaxed">—</p>
+          <h1 class="dish-name mt-6 text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight">—</h1>
+          <p class="dish-desc mt-6 text-lg max-w-prose leading-relaxed">—</p>
           <div class="dish-badges mt-8 flex items-center gap-4"></div>
         </div>
         <div id="hero-text-b" class="absolute top-0 left-0 w-full opacity-0">
@@ -59,8 +93,8 @@
             <img src="assets/icon-heart.png" alt="" class="w-5 h-5">
             <span class="text-sm uppercase tracking-wider font-semibold" style="color:var(--brand-dark-text)">Блюдо дня</span>
           </div>
-          <h1 class="dish-name mt-5 text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight">—</h1>
-          <p class="dish-desc mt-5 text-lg max-w-prose leading-relaxed">—</p>
+          <h1 class="dish-name mt-6 text-4xl lg:text-6xl font-extrabold leading-tight tracking-tight">—</h1>
+          <p class="dish-desc mt-6 text-lg max-w-prose leading-relaxed">—</p>
           <div class="dish-badges mt-8 flex items-center gap-4"></div>
         </div>
       </div>
@@ -155,10 +189,6 @@
   </div>
 
   <!-- Подключение данных и скриптов -->
-  <!-- В начале <head> -->
-
-
-<!-- В конце <body> перед закрывающим тегом -->
 <script src="js/appUtils.js?v=3" defer></script>
 <script src="js/appState.js?v=3" defer></script>
 <script src="js/menuData.js?v=3" defer></script>
@@ -170,21 +200,7 @@
 <script src="js/decor.js?v=3" defer></script>
 <script src="js/gestures.js?v=3" defer></script>
 <script src="js/utils.js?v=3" defer></script>
+<script src="js/preloader.js?v=3" defer></script>
 <script src="js/main.js?v=3" defer></script>
-  
-  <!-- <script>
-    // Регистрация Service Worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function() {
-        navigator.serviceWorker.register('/sw.js')
-          .then(function(registration) {
-            console.log('ServiceWorker registration successful with scope: ', registration.scope);
-          })
-          .catch(function(error) {
-            console.log('ServiceWorker registration failed: ', error);
-          });
-      });
-    }
-  </script> -->
 </body>
 </html>
